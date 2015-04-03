@@ -23,6 +23,11 @@ import os
 import sys
 
 inputfile = open('nexttorrent')
+'''
+The file nexttorrent contains details of next episode to be downloaded
+season:<season number>#episode:<episode number>
+Both numbers in two digit form
+'''
 filecontent = inputfile.read().strip().split('#')
 season = filecontent[0][-(filecontent[0][::-1].index(':')):]
 episode = filecontent[1][-(filecontent[1][::-1].index(':')):]
@@ -54,7 +59,7 @@ try:
     print torrenturl
     print "Adding Torrent"
     os.system("deluge-console add -p /home/balasankarc '" + torrenturl + "'")
-    if int(episode) == 24:
+    if int(episode) == 24:      # Believing that a season has only 24 episodes
         nextepisode = "01"
         nextseason = str("%02d" % (int(season) + 1))
     else:
