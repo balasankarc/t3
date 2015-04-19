@@ -44,7 +44,7 @@ PASSWORD=\<password>
 
 
 **.xemail (supports only GMail now)**  
-USERNAME=\<your jabber id - used as the sender>  
+USERNAME=\<your email id - used as the sender>  
 PASSWORD=\<password>
 
 
