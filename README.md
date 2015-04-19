@@ -8,27 +8,31 @@ WARNING : Downloading TV Shows without their respective owners' permission is de
 
 ##Requirements
 1. Packages deluge, deluge-web, deluge-console
-2. Python 2.7 - Porting to Python3 is going on. Will update once done.
-3. Python modules - urllib2, lxml, argparse, xmpp, smtplib
+2. Python
+3. If using Python 2.7 then modules - urllib2 , lxml, argparse, sleekxmpp, smtplib
+4. If using Python 3 then modules - urllib.request, urllib.error, urllib.parse, lxml, argparse, sleekxmpp, smtplib
 
 ##Installation
 Either clone the repository  
 `git clone https://gitlab.com/balasankarc/tbbt-downloader.git`  
 `cd tbbt-downloader`  
-`python t3.py 1 <show_id>`
+`python python-t3.py 1 <show_id>`
 
 ##Usage
 The basic usage of the script is as follows  
-`python t3.py [options] show_id`  
+`python python-t3.py [options] show_id`  
 where the show_id follows the list of shows supported above. 
+
+For Python 3, substitute python3-t3.py for python-t3.py.
+
 ####Options
 The various options supported by T3 are  
 
 Syntax  | Meaning  | Example
 :-------------:|:-------------:|:----------:
--h  | View the help  | python t3.py -h
---email \<EMAIL>  | Send email notifications | python t3.py --email test@example.com 1
---xmpp \<JID>  | Send XMPP notifications | python t3.py --xmpp test@example.com 1
+-h  | View the help  | python python-t3.py -h
+--email \<EMAIL>  | Send email notifications | python python-t3.py --email test@example.com 1
+--xmpp \<JID>  | Send XMPP notifications | python python-t3.py --xmpp test@example.com 1
 
 Note : For the notifications to work, the files .xsend and .xemail should be present inside the $HOME directory. The content of these files are  
 

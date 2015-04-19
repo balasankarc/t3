@@ -15,7 +15,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import re
 import os
 from lxml import etree
@@ -81,8 +81,8 @@ try:
     episode = "%02d" % int(filecontent[1][-(filecontent[1][::-1].index(':')):])
     headers = {'User-Agent': 'Mozilla/5.0'}
     # Change user agent since eztv rejected default one.
-    req = urllib2.Request(show_link[int(args.show_id)], None, headers)
-    page = urllib2.urlopen(req)
+    req = urllib.request.Request(show_link[int(args.show_id)], None, headers)
+    page = urllib.request.urlopen(req)
     pagecontenthtml = page.read()
     tree = etree.HTML(pagecontenthtml)
     r = tree.xpath('//a[contains(@class, "magnet")]/@href')
@@ -98,7 +98,7 @@ try:
             sendemail.sendmail(
                 args.email, 'Torrent Added', text)
         if args.xmpp:
-            sendxmpp.sendxmpp(args.xmpp, 'Torrent Added : '+text)
+            sendxmpp.sendmsg(args.xmpp, 'Torrent Added : '+text)
         if latestepisode == episode_count[int(args.show_id)]:
             nextseson = "%02d" % (int(season) + 1)
             nextepisode = "01"
@@ -108,8 +108,9 @@ try:
         infostring = "season:" + nextseason + "#episode:" + nextepisode
         downloaded_list[int(args.show_id)] = infostring
         outfile = open('nexttorrent', 'w')
-        for key in downloaded_list.keys():
+        for key in list(downloaded_list.keys()):
             outfile.write(str(key) + " " + downloaded_list[key] + "\n")
         outfile.close()
-except:
+except Exception as err:
+    print(Exception, err)
     sys.exit(0)
