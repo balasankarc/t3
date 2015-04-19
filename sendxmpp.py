@@ -12,7 +12,7 @@ def sendxmpp(tojid,text):
     for mandatory in ['jid','password']:
         if mandatory not in jidparams.keys():
             open(os.environ['HOME']+'/.xsend','w').write('#Uncomment fields before use and type in correct credentials.\n#JID=romeo@montague.net/resource (/resource is optional)\n#PASSWORD=juliet\n')
-            print 'Please point ~/.xsend config file to valid JID for sending messages.'
+            print ('Please point ~/.xsend config file to valid JID for sending messages.')
             sys.exit(0)
 
     jid=xmpp.protocol.JID(jidparams['jid'])
@@ -20,11 +20,11 @@ def sendxmpp(tojid,text):
 
     con=cl.connect()
     if not con:
-        print 'could not connect!'
+        print ('could not connect!')
         sys.exit()
     auth=cl.auth(jid.getNode(),jidparams['password'],resource=jid.getResource())
     if not auth:
-        print 'could not authenticate!'
+        print ('could not authenticate!')
         sys.exit()
 
     #cl.SendInitPresence(requestRoster=0)   # you may need to uncomment this for old server
