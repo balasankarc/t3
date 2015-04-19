@@ -22,6 +22,8 @@ from lxml import etree
 import sys
 import argparse
 from argparse import RawTextHelpFormatter as rt
+import sendemail
+import sendxmpp
 
 
 def getinfo(show_id, title):
@@ -45,6 +47,8 @@ def getinfo(show_id, title):
         episode = "%02d" % int(splitinfo[pos_e + 1:])
         info = (season, episode)
     return info
+
+
 try:
     show_list = {1: 'The Big Bang Theory', 2: 'Modern Family'}
     show_link = {1: 'https://eztv.ch/shows/23/',
@@ -55,6 +59,10 @@ try:
     parser.add_argument(
         "show_id", help="Specify the show id\n" +
         "\n".join(str(show_list)[1:-1].split(', ')))
+    parser.add_argument(
+        "--email", help="Specify email address to send notification")
+    parser.add_argument(
+        "--xmpp", help="Specify jabber address to send notification")
     args = parser.parse_args()
     inputfile = open('nexttorrent')
     '''
@@ -84,6 +92,13 @@ try:
     (latestseason, latestepisode) = getinfo(int(args.show_id), title)
     if latestseason == season and latestepisode == episode:
         os.system("deluge-console add '" + magnet_link + "'")
+        text = show_list[int(args.show_id)] + ' S' + str(
+            season) + 'E' + str(episode)
+        if args.email:
+            sendemail.sendmail(
+                args.email, 'Torrent Added', text)
+        if args.xmpp:
+            sendxmpp.sendxmpp(args.xmpp, 'Torrent Added : '+text)
         if latestepisode == episode_count[int(args.show_id)]:
             nextseson = "%02d" % (int(season) + 1)
             nextepisode = "01"
