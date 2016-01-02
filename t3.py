@@ -13,6 +13,18 @@ import argparse
 import sendemail
 import sendxmpp
 
+def size_numeric(size_string):
+    '''
+    Return the size of torrent in MBs as a float.
+    '''
+    if "GB" in size_string.upper():
+        numeralstring = size_string.upper()[:size_string.upper().index("GB")]
+        integer = float(numeralstring.strip())
+        in_mb = integer * 1024.00
+    elif "MB" in size_string.upper():
+        in_mb = float(size_string.upper()[:size_string.upper().index("MB")])
+    return in_mb
+
 
 parser = argparse.ArgumentParser(description='Download TV show torrents')
 parser.add_argument(
@@ -76,7 +88,7 @@ for show in tv_shows:
         magnet_link = row.xpath('td/a[contains(@class, "magnet")]/@href')
 
         # Get the size column of the row
-        size = float(row.xpath('td/text()')[-2][:-3])
+        size = size_numeric(row.xpath('td/text()')[-2])
 
         # Populate the nested json object with seasonepisodestring
         # and size as keys
