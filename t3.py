@@ -13,6 +13,7 @@ import argparse
 import sendemail
 import sendxmpp
 
+
 def size_numeric(size_string):
     '''
     Return the size of torrent in MBs as a float.
