@@ -41,16 +41,13 @@ nextonefile.close()
 try:
     tv_shows = json.loads(nextonecontent)
 except:
-    print("Incorrect input file")
     sys.exit(0)
 
 # Setting request header to mimic Mozilla FIrefox
 headers = {'User-Agent': 'Mozilla/5.0'}
 
 for show in tv_shows:
-    print(show)
     if not tv_shows[show]['nextseason'] or not tv_shows[show]['nextepisode']:
-        print("No information found")
         continue
 
     # Generate the string SxxExx from input file
@@ -83,9 +80,9 @@ for show in tv_shows:
             match = re.search(regex, name)
             if match:
                 break
-        seasonepisodestring = match.group()
-        season = match.group('season')
-        episode = match.group('episode')
+        season = match.group('season').zfill(2)
+        episode = match.group('episode').zfill(2)
+        seasonepisodestring = "S" + season + "E" + episode
         magnet_link = row.xpath('td/a[contains(@class, "magnet")]/@href')
 
         # Get the size column of the row
@@ -98,13 +95,12 @@ for show in tv_shows:
         out[seasonepisodestring][size] = magnet_link
     if nextitem in out:
         min_size = min(out[nextitem])  # Find the link with smallest size
-        print(min_size, ":", out[nextitem][min_size])
         os.system("deluge-console add '" + out[nextitem][min_size][0] + "'")
         if args.email:
             sendemail.sendmail(
                 args.email, 'Torrent Added', name)
         if args.xmpp:
-            sendxmpp.sendmsg(args.xmpp, 'Torrent Added : '+name)
+            sendxmpp.sendmsg(args.xmpp, 'Torrent Added : ' + name)
 
         if tv_shows[show]['nextepisode'] == '24':
             # If the number of episodes in a season has exceeded,
@@ -119,7 +115,7 @@ for show in tv_shows:
         tv_shows[show]['nextseason'] = nextseason
         tv_shows[show]['nextepisode'] = nextepisode
     else:
-        print("Torrent not here yet")
+        continue
 
 nextonefile = open('nextone', 'w')
 nextonefile.write(json.dumps(tv_shows, indent=4))
